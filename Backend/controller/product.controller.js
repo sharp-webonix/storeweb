@@ -1,107 +1,99 @@
 import Product from "../models/product.model.js";
 import asyncHandler from "express-async-handler";
 
-// CREATE PRODUCT
-const createProduct = asyncHandler(async () => {
+// CREATE A PRODUCT
+const createProduct = asyncHandler(async (req, res) => {
 
-    const newProduct = await Product(req.body);
-    const product = newProduct.save();
+    const newProduct = Product(req.body);
+    const product = await newProduct.save();
     if (product) {
-        resizeBy.status(201).json(product);
+        console.log(product)
+        res.status(200).json(product);
     } else {
-        resizeBy.status(400);
-        throw new Error("Product was not created.");
+        res.status(400);
+        throw new Error("Product was not created");
     }
 });
 
-//UPDATE PRODUCT
-
-const updateProduct = asyncHandler(async (res, req) => {
-    const updatedProduct = await Product.findByIDAndUpdate(
-        req.param.id,
-        {
-            $set: req.body
-        },
+//UPDATED PRODUCT
+const updateProduct = asyncHandler(async (req, res) => {
+    const updatedProduct = await Product.findByIdAndUpdate(
+        req.params.id,
+        { $set: req.body },
         { new: true }
     );
 
-    if (!updateProduct) {
-        res.status(400);
-        throw new Error("Product has noot been updated");
+    if (!updatedProduct) {
+        res.status(404);
+        throw new Error("Product not found");
     } else {
-        res.status(201).json(updateProduct);
+        res.status(200).json(updatedProduct);
     }
 });
 
-//DELETE PRODUCT 
-const deleteProduct = asyncHandler(async (req, res) => {
-    const product = await Product.findByIDAndDelete(req.params.id);
+//DELETE PRODUCT
+const deleteProduct = asyncHandler(async () => {
+    const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) {
-        res.status(400);
-        throw new Error("product was not deleted");
+        res.status(404);
+        throw new Error("Product not found");
     } else {
-        res.status(201).json("Product deleted successfully");
+        res.status(200).json("Product has been deleted!");
     }
 });
 
-//GET PRODUCT
+// GET PRODUCT
 const getProduct = asyncHandler(async (req, res) => {
-    const product = await Product.findByIDAnd(req.params.id);
-
-    if (!prodcut) {
-        res.status(400);
-        throw new Error("product not found");
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+        res.status(404);
+        throw new Error("Product not found");
     } else {
         res.status(200).json(product);
     }
 });
 
-
 //GET ALL PRODUCTS
+
 const getAllProducts = asyncHandler(async (req, res) => {
     const qNew = req.query.new;
-    const qCategory = req.query.Category;
-    const qsearch = req.query.search;
-    let prodcuts;
+
+    const qCategory = req.query.category;
+
+    const qSearch = req.query.search;
+
+    let products;
 
     if (qNew) {
-        prodcuts = await Product.find().sort({ createdAt: -1 });
+        products = await Product.find().sort({ createdAt: -1 });
     } else if (qCategory) {
-        prodcuts = await Product.find({ categories: { $in: [qCategory] } });
-    } else if (qsearch) {
-        prodcuts = await Product.find({
+        products = await Product.find({ categories: { $in: [qCategory] } });
+    } else if (qSearch) {
+        products = await Product.find({
             $text: {
-                $search: qsearch,
+                $search: qSearch,
                 $caseSensitive: false,
-                $dicriticSensitive: false,
-            }
-        })
-    } else {
-        products = await Product.find(); sort({ createdAt: -1 });
-    }
-});
-
-//RATING PRODUCT
-
-const ratingproduct = asyncHandler(async (req, res) => {
-    const { star, name, comment, postedBy } = req.body;
-
-    if (star && name && comment && postedBy) {
-        const postedBy = await Product.findByIDAndUpdate(req.params.id,
-
-            {
-                $push: { ratings: { star, name, comment, postedBy } },
-
+                $diacriticSensitive: false,
             },
-            {
-                new: true,
-            }
+        });
+    } else {
+        products = await Product.find().sort({ createdAt: -1 });
+    }
+
+    res.status(200).json(products);
+});
+
+// RATING
+const ratingProduct = asyncHandler(async (req, res) => {
+    const { star, name, comment, postedBy } = req.body;
+    if (star) {
+        const postedRating = await Product.findByIdAndUpdate(
+            req.params.productId,
+            { $push: { ratings: { star, name, comment, postedBy } } },
+            { new: true }
         );
-        res.status(201).json("product was rated successfully");
-    } else{
-        res.status(400);
-        throw new Error("Product was not rated");
+        res.status(201).json(postedRating);
     }
 });
 
-export {ratingproduct,getAllProducts,getProduct,createProduct,updateProduct,deleteProduct}
+export { ratingProduct, getAllProducts, getProduct, createProduct, updateProduct, deleteProduct };
