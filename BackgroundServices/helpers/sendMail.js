@@ -1,6 +1,5 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
-import { errorMonitor } from "nodemailer/lib/xoauth2";
 dotenv.config();
 
 function createTransporter(config) {
