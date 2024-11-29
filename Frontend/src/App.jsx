@@ -9,6 +9,9 @@ import Announcement from "./components/Announcement";
 import Product from "./pages/Product";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ProductList from "./pages/ProductList";
+import Contact from "./pages/Contact";
+import Order from "./pages/Order";
 
 function App() {
   const Layout = () => {
@@ -43,12 +46,24 @@ function App() {
           element:<Product/>,
         },
         {
+          path:"/products/:searchterm",
+          element:<ProductList/>,
+        },
+        {
           path:"/login",
           element:<Login/>,
         },
         {
           path:"/create-account",
           element:<Register/>,
+        },
+        {
+          path:"/contact",
+          element:<Contact/>,
+        },
+        {
+          path:"/myorders",
+          element:<Order/>,
         },
       ]
     },
