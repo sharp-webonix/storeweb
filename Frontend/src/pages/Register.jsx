@@ -1,13 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { userRequest } from "../requestMethods";
+import {userRequest } from "../requestMethods.js"
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
@@ -46,11 +46,11 @@ const Register = () => {
           <h2 className=" text-xl text-gray-700 mb-5 ">CREATE ACCOUNT</h2>
           <form className="spay-y-5">
             <div className="mb-5">
-              <label htmlFor="email" className="block text-gray-600 mb-1">Full Name</label>
+              <label htmlFor="" className="block text-gray-600 mb-1">Full Name</label>
               <input type="text" placeholder="Sharp" className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#5faed5]" onChange={(e) => setName(e.target.value)} />
             </div>
             <div className="mb-5">
-              <label htmlFor="" className="block text-gray-600 mb-1">Email</label>
+              <label htmlFor="email" className="block text-gray-600 mb-1">Email</label>
               <input type="text" placeholder="example@email.com" className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#5faed5]" onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className="mb-5">
